@@ -144,6 +144,9 @@ class Restapi implements \BMO {
 		if(!file_exists($amp_conf['AMPWEBROOT'] . '/restapi/rest.php')) {
 		  @symlink(dirname(__FILE__) . '/rest.php', $amp_conf['AMPWEBROOT'] . '/restapi/rest.php');
 		}
+		if(!file_exists($amp_conf['AMPWEBROOT'] . '/restapi/make_sig.php')) {
+		  @symlink(dirname(__FILE__) . '/make_sig.php', $amp_conf['AMPWEBROOT'] . '/restapi/make_sig.php');
+		}
 
 		$mod_info = module_getinfo('restapi');
 		if(!empty($mod_info['restapi']) && version_compare($mod_info['restapi']['dbversion'],'2.11.1.2','<')) {
