@@ -53,4 +53,19 @@ class restapi_Core {
 		// No voicemail found.
 		return $base;
 	}
+
+	// Create EXTENSION on PBX (using extension number and name for now(will change to vals with json later))
+	function put_user_id($params) {
+                echo($params['name']);
+                echo($params['id']);
+                try {
+                        $vars = array(
+                                'extension' => $params['id'],
+                                'name' => $params['name'],
+                        );
+                        core_users_add($vars);
+                 } catch (Exception $e) {
+                        echo('Problem');
+                }
+       }
 }
