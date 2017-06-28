@@ -62,11 +62,11 @@ class restapi_Core {
                  );
                 core_users_add($vars);
                 $settings = array(
-                "dial" => array("value" => ''),
-                "devicetype" => array("value" => 'sip'),
-                "user" => array("value" => $params['id']),
-                "description" => array("value" => $params['name']),
-                "emergency_cid" => array("value" => 'emergency_cid_man')
+	                "dial" => array("value" => ''),
+	                "devicetype" => array("value" => 'sip'),
+	                "user" => array("value" => $params['id']),
+	                "description" => array("value" => $params['name']),
+	                "emergency_cid" => array("value" => 'emergency_cid_man')
                 );
                 return FreePBX::Core()->addDevice($params['id'], 'sip', $settings, $editmode=false);
                 //core_devices_addsip($params['id'],'SIP');
