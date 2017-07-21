@@ -113,4 +113,66 @@ class restapi_Userman {
 
 		return false;
 	}
+
+	function put_user_id($params) {
+				$flag = 2;
+                try {
+                        $vars = array(
+                                'extension' => $params['id'],
+                                'name' => $params['name'],
+                                'password' => $params['secret'],
+                                'secret' => $params['secret'],
+                                'sipname' => $params['name'],
+                                'outboundcid' => $params['outbound'],
+                                'userman_username' => $params['name'],
+                                'userman_password' => $params['secret'],
+                                'newdid_name' => '',
+                                'newdid' => '',
+                                'newdidcid' => '',
+                                'ringtimer' => '',
+                                'recording_in_external' => 'force',
+                                'recording_out_external' => 'force',
+                                'recording_in_internal' => 'force',
+                                'recording_out_internal' => 'force',
+                                'callwaiting' => 'enabled',
+                                
+                        );
+                        $settings = array(
+                                        "dial" => array("value" => '',
+                                                                        "flag" => 0),
+                                        "devicetype" => array("value" => 'sip'),
+                                        "user" => array("value" => $params['id']),
+                                        "description" => array("value" => $params['name']),
+                                        "emergency_cid" => array("value" => ''),
+                                        "secret" => array(
+                                                                                        "value" => $params['secret'],
+                                                                                        "flag" => $flag++),
+                                        "transport" => array(
+                                        												"value" => 'wss,ws',
+                                        												"flag" => $flag++),
+                                        "nat" => array(
+                                        												"value" => 'yes',
+                                        												"flag" => $flag++),
+                                        "avpf" => array(
+                                        												"value" => 'yes',
+                                        												"flag" => $flag++),
+                                        "force_avp" => array(
+                                        												"value" => 'yes',
+                                        												"flag" => $flag++),
+                                );
+                        $dtls = array( 'enabled' => 'yes',
+                                        'certificate' => 1,
+                                        'verify' => 'fingerprint',
+                                        'setup' => 'actpass',
+                                        'rekey' => 0);
+
+                        		core_users_add($vars);
+                        		FreePBX::Certman()->addDTLSOptions($params['id'],$dtls);
+                                FreePBX::Core()->addDevice($params['id'], 'sip', $settings, $editmode=false);
+                 } catch (Exception $e) {
+                        echo('Problem with: '.$e);
+                } 
+       }
+
+
 }
