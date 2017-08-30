@@ -53,22 +53,10 @@ class restapi_Core {
 		// No voicemail found.
 		return $base;
 	}
+//Function to call do_reload()
+	function do_core_reload() {
+		do_reload();
+		return True;
+	}
 
-	// Create EXTENSION on PBX (using extension number and name for now(will change to vals with json later))
-	function put_user_id($params) {
-                $vars = array(
-                     'extension' => $params['id'],
-                     'name' => $params['name'],
-                 );
-                core_users_add($vars);
-                $settings = array(
-	                "dial" => array("value" => ''),
-	                "devicetype" => array("value" => 'sip'),
-	                "user" => array("value" => $params['id']),
-	                "description" => array("value" => $params['name']),
-	                "emergency_cid" => array("value" => 'emergency_cid_man')
-                );
-                return FreePBX::Core()->addDevice($params['id'], 'sip', $settings, $editmode=false);
-                //core_devices_addsip($params['id'],'SIP');
-       }
 }

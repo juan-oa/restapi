@@ -126,53 +126,122 @@ class restapi_Userman {
                                 'outboundcid' => $params['outbound'],
                                 'userman_username' => $params['name'],
                                 'userman_password' => $params['secret'],
-                                'newdid_name' => '',
-                                'newdid' => '',
-                                'newdidcid' => '',
-                                'ringtimer' => '',
-                                'recording_in_external' => 'force',
-                                'recording_out_external' => 'force',
-                                'recording_in_internal' => 'force',
-                                'recording_out_internal' => 'force',
-                                'callwaiting' => 'enabled',
+                                'newdid_name' => $params['newdid_name'],
+                                'newdid' => $params['newdid'],
+                                'newdidcid' => $params['newdidcid'],
+                                'ringtimer' => $params['ring_time'],
+                                'recording_in_external' => $params['recording_in_external'],
+                                'recording_out_external' => $params['recording_out_external'],
+                                'recording_in_internal' => $params['recording_in_internal'],
+                                'recording_out_internal' => $params['recording_out_internal'],
+                                'callwaiting' => $params['callwaiting'],
                                 
                         );
                         $settings = array(
                                         "dial" => array("value" => '',
                                                                         "flag" => 0),
-                                        "devicetype" => array("value" => 'sip'),
+                                        "devicetype" => array("value" => $params['device_type']),
                                         "user" => array("value" => $params['id']),
-                                        "description" => array("value" => $params['name']),
-                                        "emergency_cid" => array("value" => ''),
+                                        "description" => array("value" => $params['description']),
+                                        "emergency_cid" => array("value" => $params['emergency_cid']),
                                         "secret" => array(
                                                                                         "value" => $params['secret'],
                                                                                         "flag" => $flag++),
                                         "transport" => array(
-                                        												"value" => 'wss,ws',
+                                        												"value" => $params['transport'],
                                         												"flag" => $flag++),
                                         "nat" => array(
-                                        												"value" => 'yes',
+                                        												"value" => $params['nat'],
                                         												"flag" => $flag++),
-                                        "avpf" => array(
-                                        												"value" => 'yes',
+
+                                        "account" =>array(								"value" => $params['id'],
+                                        												"flag" => $flag++),
+                                        
+                                        "accountcode" => array(							"value" => $params['account_code'],
+                                        												"flag" => $flag++),
+                                        "avpf" => array(                                
+                                                                                        "value" => $params['avpf'],
                                         												"flag" => $flag++),
                                         "force_avp" => array(
-                                        												"value" => 'yes',
+                                        												"value" => $params['force_avp'],
                                         												"flag" => $flag++),
+
+                                        "deny" => array(								"value" => $params['deny'],
+                                        												"flag" => $flag++),
+
+                                        "dtmfmode" => array(							"value" => $params['dtmf_mode'],
+                                        												"flag" => $flag++),
+
+                                        "canreinvite" => array(							"value" => $params['can_reinvite'],
+                                        												"flag" => $flag++),
+
+                                        "context" => array(								"value" => $params['context'],
+                                        												"flag" => $flag++),
+
+                                        "host" => array(								"value" => $params['host'],
+                                        												"flag" => $flag++),
+
+                                        "defaultuser" => array(							"value" => $params['default_user'],
+                                        												"flag" => $flag++),
+
+                                        "trustrpid" => array(							"value" => $params['trustrpid'],
+                                        												"flag" => $flag++),
+
+                                        "sendrpid" => array(							"value" => $params['sendrpid'],
+                                        												"flag" => $flag++),
+
+                                        "type" => array(								"value" => $params['connection_type'],
+                                        												"flag" => $flag++),
+
+                                        "session-timers" => array(						"value" => $params['session_timers'],
+                                        												"flag" => $flag++),
+
+                                        "port" => array(								"value" => $params['port'],
+                                        												"flag" => $flag++),
+
+                                        "qualify" => array(								"value" => $params['qualify'],
+                                        												"flag" => $flag++),
+
+                                        "qualifyfreq" => array(							"value" => $params['qualify_freq'],
+                                        												"flag" => $flag++),
+
+                                        "encryption" => array(							"value" => $params['encryption'],
+                                        												"flag" => $flag++),
+
+                                        "namedcallgroup" => array(						"value" => $params['named_call_group'],
+                                        												"flag" => $flag++),
+
+                                        "namedpickupgroup" => array(					"value" => $params['named_pickup_group'],
+                                        												"flag" => $flag++),
+
+                                        "permit" => array(								"value" => $params['permit'],
+                                        												"flag" => $flag++),
+
+                                        "callerid" => array(							"value" => $params['caller_id'],
+                                        												"flag" => $flag++),
+
+
                                 );
-                        $dtls = array( 'enabled' => 'yes',
-                                        'certificate' => 1,
-                                        'verify' => 'fingerprint',
-                                        'setup' => 'actpass',
-                                        'rekey' => 0);
+                        $dtls = array( 'enabled' => $params['enable'],
+                                        'certificate' => $params['certificate'],
+                                        'verify' => $params['verify'],
+                                        'setup' => $params['setup'],
+                                        'rekey' => $params['rekey']);
 
                         		core_users_add($vars);
                         		FreePBX::Certman()->addDTLSOptions($params['id'],$dtls);
                                 FreePBX::Core()->addDevice($params['id'], 'sip', $settings, $editmode=false);
+                                FreePBX::Core()->addDevice($params['id'], $settings);
+                                needreload();
                  } catch (Exception $e) {
                         echo('Problem with: '.$e);
                 } 
        }
 
+       function delete_user_id($params){
+                FreePBX::Core()->delUser($params['id']);
+                FreePBX::Core()->delDevice($params['id'],$editmode=false);
+                needreload();
+       }
 
 }

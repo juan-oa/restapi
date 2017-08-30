@@ -30,4 +30,10 @@ $this->add_map('put', '/userman/extensions/:id', 'userman', array(
 		'method'		=> 'put_user_id',
 ));
 
+$this->add_map('delete', '/userman/extensions/:id', 'userman', array(
+                'path'                  => 'userman.php',
+                'controller'    => 'restapi_Userman',
+                'method'                => 'delete_user_id',
+));
+
 ?>
